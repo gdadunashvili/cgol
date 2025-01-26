@@ -1,2 +1,2 @@
 .DS_Store
-scripts/main.js.map
+scripts/*.js.map

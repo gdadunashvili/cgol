@@ -1,4 +1,6 @@
-import { Box, Sprite } from "./sprite";
+import { play_hit_sound } from "./sounds";
+import { Player } from "./sprite";
+import { Box } from "./utils";
 
 export type ControleKeys = {
   left: string, 
@@ -8,12 +10,19 @@ export type ControleKeys = {
   attack: string
 }
 
-function bounce(entity: Sprite, other_entity: Sprite, overlap: number) {
+function bounce(entity: Player, other_entity: Player, overlap: number) {
   const pos = entity.bounding_box.pos;
   const other_pos = other_entity.bounding_box.pos;
 
   const s = other_pos.x  - pos.x > 0 ? 1 : -1;
-  other_pos.x += overlap * s/2;
+  other_pos.x += overlap * s*0.7;
+}
+function knock_back(entity: Player, other_entity: Player, overlap: number) {
+  const pos = entity.bounding_box.pos;
+  const other_pos = other_entity.bounding_box.pos;
+
+  const s = other_pos.x  - pos.x > 0 ? 1 : -1;
+  pos.x -= overlap * s*0.3;
 }
 
 function collision_detector(entity: Box, other_entity: Box): number {
@@ -32,8 +41,8 @@ function collision_detector(entity: Box, other_entity: Box): number {
   return 0;
 }
 
-export function entity_controller(entity: Sprite, 
-                          other_entity: Sprite,
+export function entity_controller(entity: Player, 
+                          other_entity: Player,
                           canvas: HTMLCanvasElement,
                           keys: { [key: string]: boolean },
                           controle_keys: ControleKeys){
@@ -63,11 +72,16 @@ export function entity_controller(entity: Sprite,
     keys.w = false
   }
 
+  entity.is_atacking = false;
   if(keys[controle_keys.attack]){
+    entity.is_atacking = true;
     let overlap: number = collision_detector(entity.attack_box,
                                              other_entity.bounding_box);
     if (overlap>0){
+      play_hit_sound();
       bounce(entity, other_entity, overlap);
+      knock_back(entity, other_entity, overlap);
+
       other_entity.life -= entity.damage;
     }
   }
