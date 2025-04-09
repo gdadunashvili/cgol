@@ -1,2 +1,5 @@
-.DS_Store
 scripts/*.js.map
+assets/
+node_modules/
+!assets/sound/hit.mp3
+

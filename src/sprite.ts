@@ -15,7 +15,7 @@ export class Player {
   is_atacking: boolean;
   life: number;
   life_display: number;
-  damage: number;
+  base_damage: number;
 
   private offset_attac_box(){
     let x_offset:number;
@@ -53,8 +53,8 @@ export class Player {
 
     this.offset_attac_box();
 
-    this.life = 100;
-    this.damage = 1;
+    this.life = 30;
+    this.base_damage = 1;
 
   }
  

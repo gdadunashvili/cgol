@@ -82,7 +82,7 @@ export function entity_controller(entity: Player,
       bounce(entity, other_entity, overlap);
       knock_back(entity, other_entity, overlap);
 
-      other_entity.life -= entity.damage;
+      other_entity.life -= entity.base_damage;
     }
   }
 
